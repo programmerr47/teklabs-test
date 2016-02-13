@@ -1,6 +1,6 @@
-package service.fizzbuzz;
+package api.service.fizzbuzz;
 
-import service.ListConverter;
+import api.service.ListConverter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

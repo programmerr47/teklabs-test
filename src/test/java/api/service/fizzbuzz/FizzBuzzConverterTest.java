@@ -1,6 +1,6 @@
-package service.fizzbuzz;
+package api.service.fizzbuzz;
 
-import service.fizzbuzz.FizzBuzzConverter;
+import api.service.fizzbuzz.FizzBuzzConverter;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;
