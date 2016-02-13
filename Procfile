@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/dependency/jetty-runner.jar --port $PORT target/teklabs-task-1.0.war
+web: java -Dserver.port=$PORT -jar target/teklabs-task-1.0.jar
