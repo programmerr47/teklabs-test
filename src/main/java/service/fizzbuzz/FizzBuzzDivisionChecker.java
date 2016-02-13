@@ -1,4 +1,4 @@
-package api.fizzbuzz;
+package service.fizzbuzz;
 
 enum FizzBuzzDivisionChecker {
     FIZZ(3),

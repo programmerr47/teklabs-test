@@ -1,4 +1,4 @@
-package api.fizzbuzz;
+package service;
 
 import java.util.List;
 

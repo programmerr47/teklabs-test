@@ -1,8 +1,12 @@
-package api.fizzbuzz;
+package service.fizzbuzz;
+
+import service.ListConverter;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class FizzBuzzConverter implements ListConverter<Integer, String> {
 
     public List<String> convert(List<Integer> numbers) {
