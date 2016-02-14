@@ -11,6 +11,7 @@
   <properties>
     <java.version>1.8</java.version>
     <junit.version>4.12</junit.version>
+    <postgresql.version>9.4-1201-jdbc4</postgresql.version>
   </properties>
 
   <parent>
@@ -26,12 +27,25 @@
       <version>${junit.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${postgresql.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
   </dependencies>
 
