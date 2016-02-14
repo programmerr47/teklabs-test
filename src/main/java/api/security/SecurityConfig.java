@@ -12,7 +12,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -22,13 +22,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
 
                 .and()
-                .csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()
+                .exceptionHandling()
+                .authenticationEntryPoint(restAuthenticationEntryPoint())
 
                 .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(restAuthenticationEntryPoint());
+                .csrf().disable()
+                .authorizeRequests()
+                .anyRequest().authenticated();
     }
 
     @Autowired

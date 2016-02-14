@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 public class PersistenceConfig {
 
     @Bean
-    public SpringLiquibase springLiquibase() {
+    public SpringLiquibase liquibase() {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource());
         liquibase.setChangeLog("classpath:changelog/db-changelog.xml");
