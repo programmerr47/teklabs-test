@@ -18,4 +18,9 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="2" author="lyashenko">
+    <comment>Rename 'user' table to 'users'</comment>
+    <renameTable oldTableName="user" newTableName="users"/>
+  </changeSet>
+
 </databaseChangeLog>
