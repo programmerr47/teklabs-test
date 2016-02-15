@@ -1,6 +1,8 @@
 package api.security;
 
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -27,6 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AuthTokenService authTokenService;
+
+    @Autowired
+    private PasswordEncoder restPasswordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -69,6 +75,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationProvider restAuthenticationProvider() {
         RestAuthenticationProvider authenticationProvider = new RestAuthenticationProvider();
         authenticationProvider.setUserDetailsService(restUserDetailsService);
+        authenticationProvider.setPasswordEncoder(restPasswordEncoder);
         return authenticationProvider;
+    }
+
+    @Bean(name = "sha256Encryptor")
+    public StrongPasswordEncryptor sha256Encryptor() {
+        return new StrongPasswordEncryptor();
     }
 }
