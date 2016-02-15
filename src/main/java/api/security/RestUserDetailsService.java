@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 
 @Component
-public class RestUserDetailsService implements UserDetailsService {
+class RestUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
