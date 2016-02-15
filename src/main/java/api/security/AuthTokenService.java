@@ -26,12 +26,22 @@ class AuthTokenService {
 
     public AuthToken registerUserToken(String username) {
         if (tokenUserMap.containsValue(username)) {
-            tokenUserMap.values().remove(username);
+            removeUserToken(username);
         }
         AuthToken authToken = generateToken();
         tokenUserMap.put(authToken, username);
         registerTokenExpiration(authToken);
         return authToken;
+    }
+
+    private void removeUserToken(String username) {
+        for (Map.Entry<AuthToken,String> entry : tokenUserMap.entrySet()) {
+            if (entry.getValue().equals(username)) {
+                tokenExpirationMap.remove(entry.getKey());
+                break;
+            }
+        }
+        tokenUserMap.values().remove(username);
     }
 
     private AuthToken generateToken() {
