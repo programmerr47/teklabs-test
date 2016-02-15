@@ -1,5 +1,7 @@
-package api.security;
+package api.security.handler;
 
+import api.security.AuthToken;
+import api.security.AuthTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;

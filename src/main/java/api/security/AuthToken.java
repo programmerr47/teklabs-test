@@ -1,13 +1,13 @@
 package api.security;
 
-class AuthToken {
+public class AuthToken {
     private String value;
 
     AuthToken(String value) {
         this.value = value;
     }
 
-    String getValue() {
+    public String getValue() {
         return value;
     }
 

@@ -1,12 +1,10 @@
 package api.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 class RestAuthenticationFilter extends GenericFilterBean {
-
-    private static final String TOKEN_HEADER = "X-Auth-Token";
 
     private AuthTokenService authTokenService;
 
@@ -51,7 +47,7 @@ class RestAuthenticationFilter extends GenericFilterBean {
     }
 
     private UserDetails getUserDetailsByToken(HttpServletRequest request) {
-        AuthToken authToken = new AuthToken(request.getHeader(TOKEN_HEADER));
+        AuthToken authToken = AuthTokenExtractor.extractFromRequest(request);
         return authTokenService.getUserDetailsByToken(authToken);
     }
 

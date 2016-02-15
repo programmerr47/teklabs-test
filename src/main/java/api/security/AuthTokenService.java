@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
-class AuthTokenService {
+public class AuthTokenService {
     private SecureRandom secureRandom = new SecureRandom();
     private Map<AuthToken, String> tokenUserMap = new ConcurrentHashMap<>();
     private Map<AuthToken, Instant> tokenExpirationMap = new ConcurrentHashMap<>();
@@ -60,8 +60,7 @@ class AuthTokenService {
             return null;
         }
         if (tokenIsExpired(authToken)) {
-            tokenUserMap.remove(authToken);
-            tokenExpirationMap.remove(authToken);
+            unregisterToken(authToken);
             return null;
         }
         return userDetailsService.loadUserByUsername(username);
@@ -70,5 +69,10 @@ class AuthTokenService {
     private boolean tokenIsExpired(AuthToken authToken) {
         Instant expiration = tokenExpirationMap.get(authToken);
         return expiration.isBefore(Instant.now());
+    }
+
+    public void unregisterToken(AuthToken authToken) {
+        tokenUserMap.remove(authToken);
+        tokenExpirationMap.remove(authToken);
     }
 }

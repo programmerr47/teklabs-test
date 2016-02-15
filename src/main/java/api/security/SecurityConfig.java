@@ -1,5 +1,6 @@
 package api.security;
 
+import api.security.handler.RestAuthenticationFailureHandler;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +14,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.servlet.Filter;
 
@@ -29,6 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
+
+    @Autowired
     private AuthTokenService authTokenService;
 
     @Autowired
@@ -40,7 +46,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(restAuthenticationFilter(), LogoutFilter.class)
                 .formLogin()
                 .loginProcessingUrl("/login")
+                .failureHandler(authenticationFailureHandler())
                 .successHandler(authenticationSuccessHandler)
+
+                .and()
+                .logout()
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .logoutSuccessUrl("/logout")
 
                 .and()
                 .exceptionHandling()
@@ -66,6 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         RestAuthenticationFilter authenticationFilter = new RestAuthenticationFilter();
         authenticationFilter.setAuthTokenService(authTokenService);
         return authenticationFilter;
+    }
+
+    private AuthenticationFailureHandler authenticationFailureHandler() {
+        return new RestAuthenticationFailureHandler();
     }
 
     private AuthenticationEntryPoint restAuthenticationEntryPoint() {
