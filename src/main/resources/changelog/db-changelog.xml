@@ -23,4 +23,12 @@
     <renameTable oldTableName="user" newTableName="users"/>
   </changeSet>
 
+  <changeSet id="3" author="lyashenko">
+    <comment>Insert test user into 'users' table</comment>
+    <insert tableName="users">
+      <column name="username" value="user"/>
+      <column name="password" value="t+twRcIkjmUDk5RZPX+FoLpzNuffnZyyGtPq7cMP0D/pyFia+WPrYPzTVt/IzlPj"/>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>
