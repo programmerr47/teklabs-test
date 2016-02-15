@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired
     private AuthTokenService authTokenService;
@@ -24,7 +24,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws ServletException, IOException {
         User user = (User) authentication.getPrincipal();
-        AuthToken token = authTokenService.createAuthToken(user.getUsername());
+        AuthToken token = authTokenService.registerUserToken(user.getUsername());
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode().put("token", token.getValue());

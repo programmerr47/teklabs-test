@@ -1,38 +1,64 @@
 package api.security;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.Instant;
-import java.util.UUID;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 @Component
 class AuthTokenService {
+    private SecureRandom secureRandom = new SecureRandom();
+    private Map<AuthToken, String> tokenUserMap = new ConcurrentHashMap<>();
+    private Map<AuthToken, Instant> tokenExpirationMap = new ConcurrentHashMap<>();
 
     @Autowired
-    private StandardPBEStringEncryptor encryptor;
+    private RestUserDetailsService userDetailsService;
 
     @Value("${auth.token.expirationMinutes}")
     private Integer expirationMinutes;
 
-    public AuthToken createAuthToken(String username) {
-        String randomUUID = UUID.randomUUID().toString();
-        Instant expirationDate = Instant.now().plusSeconds(expirationMinutes * 60);
-        String rawValue = randomUUID + ":" + username + ":" + expirationDate.toEpochMilli();
-        return new AuthToken(encryptor.encrypt(rawValue));
+    public AuthToken registerUserToken(String username) {
+        if (tokenUserMap.containsValue(username)) {
+            tokenUserMap.values().remove(username);
+        }
+        AuthToken authToken = generateToken();
+        tokenUserMap.put(authToken, username);
+        registerTokenExpiration(authToken);
+        return authToken;
     }
 
-    public String extractUsername(AuthToken authToken) {
-        String decryptedValue = encryptor.decrypt(authToken.getValue());
-        String[] split = decryptedValue.split(":");
-        String username = split[1];
-        Instant expirationDate = Instant.ofEpochMilli(Long.valueOf(split[2]));
-        if (expirationDate.isBefore(Instant.now())) {
+    private AuthToken generateToken() {
+        String tokenValue = new BigInteger(130, secureRandom).toString(32);
+        return new AuthToken(tokenValue);
+    }
+
+    private void registerTokenExpiration(AuthToken authToken) {
+        Instant expiration = Instant.now().plusSeconds(expirationMinutes * 60);
+        tokenExpirationMap.put(authToken, expiration);
+    }
+
+    public UserDetails getUserDetailsByToken(AuthToken authToken) {
+        String username = tokenUserMap.get(authToken);
+        if (username == null) {
             return null;
         }
-        return username;
+        if (tokenIsExpired(authToken)) {
+            tokenUserMap.remove(authToken);
+            tokenExpirationMap.remove(authToken);
+            return null;
+        }
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+    private boolean tokenIsExpired(AuthToken authToken) {
+        Instant expiration = tokenExpirationMap.get(authToken);
+        return expiration.isBefore(Instant.now());
     }
 }

@@ -1,8 +1,6 @@
 package api.security;
 
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+
+import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,15 +23,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService restUserDetailsService;
 
     @Autowired
-    private AuthenticationSuccessHandler authSuccessHandler;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private AuthTokenService authTokenService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(restAuthenticationFilter(), LogoutFilter.class)
                 .formLogin()
                 .loginProcessingUrl("/login")
-                .successHandler(authSuccessHandler)
-                .permitAll()
+                .successHandler(authenticationSuccessHandler)
 
                 .and()
                 .exceptionHandling()
@@ -52,12 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(restAuthenticationProvider());
     }
 
-    @Bean
-    public StandardPBEStringEncryptor tokenEncryptor() {
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
-        encryptor.setPassword("H_q4700289T!5A");
-        return encryptor;
+    private Filter restAuthenticationFilter() {
+        RestAuthenticationFilter authenticationFilter = new RestAuthenticationFilter();
+        authenticationFilter.setAuthTokenService(authTokenService);
+        return authenticationFilter;
     }
 
     private AuthenticationEntryPoint restAuthenticationEntryPoint() {

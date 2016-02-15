@@ -1,19 +1,61 @@
 package api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 class RestAuthenticationFilter extends GenericFilterBean {
 
+    private static final String TOKEN_HEADER = "X-Auth-Token";
+
+    private AuthTokenService authTokenService;
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+    public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain filterChain) throws IOException, ServletException {
+        try {
+            initSecurityContextByAuthToken((HttpServletRequest) request);
+            filterChain.doFilter(request, response);
+        } finally {
+            SecurityContextHolder.clearContext();
+        }
+    }
 
+    private void initSecurityContextByAuthToken(HttpServletRequest request) {
+        UserDetails userDetails = getUserDetailsByToken(request);
+        SecurityContext contextBeforeChainExecution = createSecurityContext(userDetails);
+        SecurityContextHolder.setContext(contextBeforeChainExecution);
+    }
 
+    private SecurityContext createSecurityContext(UserDetails userDetails) {
+        if (userDetails == null) {
+            return SecurityContextHolder.createEmptyContext();
+        }
+        SecurityContextImpl securityContext = new SecurityContextImpl();
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        securityContext.setAuthentication(authentication);
+        return securityContext;
+    }
+
+    private UserDetails getUserDetailsByToken(HttpServletRequest request) {
+        AuthToken authToken = new AuthToken(request.getHeader(TOKEN_HEADER));
+        return authTokenService.getUserDetailsByToken(authToken);
+    }
+
+    public void setAuthTokenService(AuthTokenService authTokenService) {
+        this.authTokenService = authTokenService;
     }
 }
