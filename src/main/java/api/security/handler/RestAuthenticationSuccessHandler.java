@@ -27,13 +27,15 @@ class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                                         Authentication authentication) throws ServletException, IOException {
         User user = (User) authentication.getPrincipal();
         AuthToken token = authTokenService.registerUserToken(user.getUsername());
+        putTokenToResponse(token, response);
+    }
 
+    private void putTokenToResponse(AuthToken authToken, HttpServletResponse response) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode().put("token", token.getValue());
+        ObjectNode node = mapper.createObjectNode().put("token", authToken.getValue());
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
-        out.print(node.toString());
-        out.flush();
-        out.close();
+        try (PrintWriter out = response.getWriter()) {
+            out.print(node.toString());
+        }
     }
 }

@@ -29,4 +29,9 @@ public class RpnCalculatorTest {
     public void unsupportedOperationTest() throws Exception {
         new RpnCalculator("1-2").calculate();
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void expressionEndWithOperator() throws Exception {
+        new RpnCalculator("5+").calculate();
+    }
 }
