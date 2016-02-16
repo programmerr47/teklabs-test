@@ -3,6 +3,7 @@ package api.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
@@ -19,10 +20,10 @@ public class DefaultAuthTokenService implements AuthTokenService {
     private Map<AuthToken, Instant> tokenExpirationMap = new ConcurrentHashMap<>();
 
     @Autowired
-    private RestUserDetailsService userDetailsService;
+    UserDetailsService userDetailsService;
 
     @Value("${auth.token.expirationMinutes}")
-    private Integer expirationMinutes;
+    Integer expirationMinutes;
 
     @Override
     public AuthToken registerUserToken(String username) {

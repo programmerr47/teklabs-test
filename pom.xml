@@ -13,6 +13,7 @@
     <junit.version>4.12</junit.version>
     <postgresql.version>9.4-1201-jdbc4</postgresql.version>
     <jasypt.version>1.9.2</jasypt.version>
+    <mockito.version>1.10.19</mockito.version>
   </properties>
 
   <parent>
@@ -26,6 +27,11 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-all</artifactId>
+      <version>${mockito.version}</version>
     </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
