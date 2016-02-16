@@ -13,6 +13,7 @@ public class RpnCalculatorTest {
         assertEquals(10, new RpnCalculator("12*0+10").calculate());
         assertEquals(1, new RpnCalculator("1").calculate());
         assertEquals(1700, new RpnCalculator("52+41*34+10*25+4").calculate());
+        assertEquals(6, new RpnCalculator("2+2*  2").calculate());
     }
 
     @Test(expected = IllegalArgumentException.class)

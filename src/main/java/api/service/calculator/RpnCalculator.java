@@ -11,7 +11,11 @@ public class RpnCalculator {
     private Stack<ExpressionOperator> operatorStack = new Stack<>();
 
     public RpnCalculator(String expression) {
-        this.expression = expression.replaceAll("\\s+", "");
+        if (expression == null) {
+            throw new IllegalArgumentException("Expression have to be not null");
+        }
+        expression = expression.replaceAll("\\s+", "");
+        this.expression = expression;
         this.exprChars = expression.toCharArray();
     }
 
