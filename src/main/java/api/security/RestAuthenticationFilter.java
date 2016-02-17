@@ -21,12 +21,8 @@ class RestAuthenticationFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain filterChain) throws IOException, ServletException {
-        try {
-            initSecurityContextByAuthToken((HttpServletRequest) request);
-            filterChain.doFilter(request, response);
-        } finally {
-            SecurityContextHolder.clearContext();
-        }
+        initSecurityContextByAuthToken((HttpServletRequest) request);
+        filterChain.doFilter(request, response);
     }
 
     private void initSecurityContextByAuthToken(HttpServletRequest request) {
