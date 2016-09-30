@@ -3,7 +3,7 @@ package api.service.calculator;
 import java.util.HashMap;
 import java.util.Map;
 
-enum ExpressionOperator implements Operator {
+enum ExpressionOperatorOld implements OperatorOld {
     MULTIPLICATION("*", 0) {
         public int calculate(int a, int b) {
             return a * b;
@@ -15,10 +15,10 @@ enum ExpressionOperator implements Operator {
         }
     };
 
-    private static Map<String, ExpressionOperator> operatorMap = new HashMap<>();
+    private static Map<String, ExpressionOperatorOld> operatorMap = new HashMap<>();
 
     static {
-        for (ExpressionOperator operator : ExpressionOperator.values()) {
+        for (ExpressionOperatorOld operator : ExpressionOperatorOld.values()) {
             operatorMap.put(operator.textForm, operator);
         }
     }
@@ -26,16 +26,16 @@ enum ExpressionOperator implements Operator {
     private String textForm;
     private int priority;
 
-    ExpressionOperator(String textForm, int priority) {
+    ExpressionOperatorOld(String textForm, int priority) {
         this.textForm = textForm;
         this.priority = priority;
     }
 
-    boolean hasMajorPriorityOver(ExpressionOperator operator) {
+    boolean hasMajorPriorityOver(ExpressionOperatorOld operator) {
         return this.priority < operator.priority;
     }
 
-    static ExpressionOperator fromText(String text) {
+    static ExpressionOperatorOld fromText(String text) {
         return operatorMap.get(text);
     }
 }

@@ -1,6 +1,6 @@
 package api.service.calculator;
 
-interface Operator {
+interface OperatorOld {
 
     int calculate(int a, int b);
 

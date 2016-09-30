@@ -1,16 +1,18 @@
 package api.service.calculator;
 
+import api.service.Calculator;
+
 import java.util.Stack;
 
-public class RpnCalculator {
+public class OldCalculator implements Calculator {
     private String expression;
     private char[] exprChars;
     private int pointer = 0;
 
     private Stack<Integer> numberStack = new Stack<>();
-    private Stack<ExpressionOperator> operatorStack = new Stack<>();
+    private Stack<ExpressionOperatorOld> operatorStack = new Stack<>();
 
-    public RpnCalculator(String expression) {
+    public OldCalculator(String expression) {
         if (expression == null) {
             throw new IllegalArgumentException("Expression have to be not null");
         }
@@ -19,6 +21,7 @@ public class RpnCalculator {
         this.exprChars = expression.toCharArray();
     }
 
+    @Override
     public int calculate() {
         numberStack.add(readNextNumber());
         while (!isEndOfExpression()) {
@@ -48,9 +51,9 @@ public class RpnCalculator {
         }
     }
 
-    private void addOperatorToStack(ExpressionOperator candidate) {
+    private void addOperatorToStack(ExpressionOperatorOld candidate) {
         while (!operatorStack.isEmpty()) {
-            ExpressionOperator currentTop = operatorStack.peek();
+            ExpressionOperatorOld currentTop = operatorStack.peek();
             if (currentTop.hasMajorPriorityOver(candidate)) {
                 applyOperatorToNumbers(operatorStack.pop());
             } else {
@@ -60,14 +63,14 @@ public class RpnCalculator {
         operatorStack.add(candidate);
     }
 
-    private void applyOperatorToNumbers(ExpressionOperator operator) {
+    private void applyOperatorToNumbers(ExpressionOperatorOld operator) {
         Integer calculationResult = operator.calculate(numberStack.pop(), numberStack.pop());
         numberStack.push(calculationResult);
     }
 
-    private ExpressionOperator readNextOperator() {
+    private ExpressionOperatorOld readNextOperator() {
         String textOperator = Character.toString(exprChars[pointer++]);
-        ExpressionOperator operator = ExpressionOperator.fromText(textOperator);
+        ExpressionOperatorOld operator = ExpressionOperatorOld.fromText(textOperator);
         if (operator == null) {
             throw new IllegalArgumentException(String.format("Incorrect expression format: " +
                     " character '%s' is not supported", textOperator));
