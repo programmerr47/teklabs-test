@@ -14,8 +14,8 @@ import api.service.calculator.token.operator.SumOperator;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static api.service.calculator.token.Bracket.CLOSE_BRACKET;
-import static api.service.calculator.token.Bracket.OPEN_BRACKET;
+import static api.service.calculator.token.bracket.RoundBracket.CLOSE_BRACKET;
+import static api.service.calculator.token.bracket.RoundBracket.OPEN_BRACKET;
 
 public class ExpressionCalculator implements Calculator {
     private final String expression;

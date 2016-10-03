@@ -1,5 +1,6 @@
 package api.service.calculator.token;
 
+import api.service.calculator.token.bracket.Bracket;
 import api.service.calculator.token.number.Number;
 import api.service.calculator.token.operator.BinaryOperator;
 

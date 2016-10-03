@@ -1,9 +1,7 @@
 package api.service.calculator.expression.builder;
 
 import api.service.calculator.exception.WrongParenthesisException;
-import api.service.calculator.expression.builder.Notation;
-import api.service.calculator.expression.builder.ReversePolishNotation;
-import api.service.calculator.token.Bracket;
+import api.service.calculator.token.bracket.RoundBracket;
 import api.service.calculator.token.Token;
 import api.service.calculator.token.number.TokenNumber;
 import api.service.calculator.token.operator.MultiplyOperator;
@@ -107,10 +105,10 @@ public class ReversePolishNotationTest {
     }
 
     private Token lb() {
-        return Bracket.OPEN_BRACKET;
+        return RoundBracket.OPEN_BRACKET;
     }
 
     private Token rb() {
-        return Bracket.CLOSE_BRACKET;
+        return RoundBracket.CLOSE_BRACKET;
     }
 }

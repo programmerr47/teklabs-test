@@ -15,8 +15,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static api.service.calculator.token.Bracket.CLOSE_BRACKET;
-import static api.service.calculator.token.Bracket.OPEN_BRACKET;
+import static api.service.calculator.token.bracket.RoundBracket.CLOSE_BRACKET;
+import static api.service.calculator.token.bracket.RoundBracket.OPEN_BRACKET;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 

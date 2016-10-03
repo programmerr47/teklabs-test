@@ -3,14 +3,13 @@ package api.service.calculator.expression.builder;
 import api.service.calculator.EnhancedStack;
 import api.service.calculator.exception.WrongParenthesisException;
 import api.service.calculator.token.*;
+import api.service.calculator.token.bracket.Bracket;
 import api.service.calculator.token.number.Number;
 import api.service.calculator.token.operator.BinaryOperator;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static api.service.calculator.token.Bracket.OPEN_BRACKET;
 
 public final class ReversePolishNotation implements Notation {
     private List<Token> outputQueue;
@@ -47,17 +46,17 @@ public final class ReversePolishNotation implements Notation {
 
         @Override
         public void visit(Bracket bracket) {
-            if (bracket == OPEN_BRACKET) {
+            if (bracket.isOpen()) {
                 operatorStack.push(bracket);
             } else {
                 operatorStack.popUntil(
                         token -> outputQueue.add(token),
-                        token -> token == OPEN_BRACKET);
+                        bracket::isPairFor);
 
                 if (operatorStack.isEmpty()) {
                     throw new WrongParenthesisException();
                 } else {
-                    operatorStack.pop(); //remove open bracket corresponding close bracket
+                    operatorStack.pop(); //remove open roundBracket corresponding close roundBracket
                 }
             }
         }
