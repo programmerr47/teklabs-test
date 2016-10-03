@@ -12,17 +12,15 @@ import java.util.Scanner;
 
 public class ExpressionLexer implements Lexer {
     private final SpecialTokens specialTokens;
+    private List<Token> parsedTokens;
 
-    //for avoiding unnecessary parameters in methods
-    private ThreadLocal<List<Token>> parsedTokens;
-
-    public ExpressionLexer(Token... specialTokens) {
+    public ExpressionLexer(Collection<Token> specialTokens) {
         this.specialTokens = new SpecialTokens(specialTokens);
     }
 
     @Override
     public Collection<Token> parse(String expression) {
-        parsedTokens = ThreadLocal.withInitial(ArrayList::new);
+        parsedTokens = new ArrayList<>();
         String localExpression = expression;
         while (!localExpression.isEmpty()) {
             if (startsWithNumber(localExpression)) {
@@ -32,7 +30,7 @@ public class ExpressionLexer implements Lexer {
             }
         }
 
-        return parsedTokens.get();
+        return parsedTokens;
     }
 
     private String cutOffNewToken(String expression) throws IllegalTokenException {
@@ -50,7 +48,7 @@ public class ExpressionLexer implements Lexer {
 
     private String cutOff(String expression, TokenExtractor extractor) throws IllegalTokenException {
         Token parsedToken = extractor.extract(expression);
-        parsedTokens.get().add(parsedToken);
+        parsedTokens.add(parsedToken);
         return expression.substring(parsedToken.toString().length());
     }
 

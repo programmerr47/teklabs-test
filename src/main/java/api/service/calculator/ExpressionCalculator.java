@@ -11,6 +11,7 @@ import api.service.calculator.token.operator.BinaryOperator;
 import api.service.calculator.token.operator.MultiplyOperator;
 import api.service.calculator.token.operator.SumOperator;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import static api.service.calculator.token.Bracket.CLOSE_BRACKET;
@@ -27,7 +28,7 @@ public class ExpressionCalculator implements Calculator {
     public int calculate() {
         BinaryOperator sum = new SumOperator();
         BinaryOperator mul = new MultiplyOperator();
-        Lexer lexer = new TrimStringLexer(new ExpressionLexer(sum, mul, OPEN_BRACKET, CLOSE_BRACKET));
+        Lexer lexer = new TrimStringLexer(new ExpressionLexer(Arrays.asList(sum, mul, OPEN_BRACKET, CLOSE_BRACKET)));
         Collection<Token> tokens = lexer.parse(expression);
         Collection<Token> rndTokens = new ReversePolishNotation().fromInfix(tokens);
         return new RndExpressionBuilder(rndTokens).buildExpr().compute();

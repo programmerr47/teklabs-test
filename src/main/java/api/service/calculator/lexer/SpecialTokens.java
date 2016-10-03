@@ -3,6 +3,7 @@ package api.service.calculator.lexer;
 import api.service.calculator.exception.IllegalTokenException;
 import api.service.calculator.token.Token;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -12,9 +13,9 @@ import static java.util.Arrays.asList;
 final class SpecialTokens {
     private final TreeSet<Token> tokens;
 
-    public SpecialTokens(Token... tokens) {
+    public SpecialTokens(Collection<Token> tokens) {
         this.tokens = new TreeSet<>(TokenComparator.INSTANCE);
-        this.tokens.addAll(asList(tokens));
+        this.tokens.addAll(tokens);
     }
 
     public boolean canRecognizeStart(String expression) {

@@ -1,5 +1,7 @@
 package api.service.calculator;
 
+import api.service.calculator.token.operator.MultiplyOperator;
+import api.service.calculator.token.operator.SumOperator;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
