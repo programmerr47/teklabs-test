@@ -9,6 +9,6 @@ enum TokenComparator implements Comparator<Token> {
 
     @Override
     public int compare(Token o1, Token o2) {
-        return o1.toString().compareTo(o2.toString());
+        return -o1.toString().compareTo(o2.toString());
     }
 }

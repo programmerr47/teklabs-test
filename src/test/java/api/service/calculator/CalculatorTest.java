@@ -1,10 +1,11 @@
 package api.service.calculator;
 
 import api.service.calculator.exception.IllegalTokenException;
-import api.service.calculator.token.operator.MultiplyOperator;
-import api.service.calculator.token.operator.SumOperator;
+import api.service.calculator.token.operator.DefaultBinaryOperator;
 import org.junit.Test;
 
+import static api.service.calculator.token.operator.DefaultBinaryOperator.MULT;
+import static api.service.calculator.token.operator.DefaultBinaryOperator.SUM;
 import static org.junit.Assert.assertEquals;
 
 public class CalculatorTest {
@@ -12,8 +13,8 @@ public class CalculatorTest {
     @Test
     public void calculate() {
         Calculator calculator = new Calculator.Builder()
-                .operators(new SumOperator(), new MultiplyOperator())
-                .useDefaultBrackets()
+                .operators(SUM, MULT)
+                .withDefaultBrackets()
                 .build();
         assertEquals(100, calculator.calculate("1*2*3+4+9*10"));
         assertEquals(15, calculator.calculate("15"));
@@ -26,8 +27,8 @@ public class CalculatorTest {
     @Test
     public void calculateWithBrackets() {
         Calculator calculator = new Calculator.Builder()
-                .operators(new SumOperator(), new MultiplyOperator())
-                .useDefaultBrackets()
+                .operators(SUM, MULT)
+                .withDefaultBrackets()
                 .build();
         assertEquals(320, calculator.calculate("1*2*(3+4+9)*10"));
     }
@@ -35,7 +36,7 @@ public class CalculatorTest {
     @Test(expected = IllegalTokenException.class)
     public void calculateBracketExpressionOnNonBracketCalculator() {
         Calculator calculator = new Calculator.Builder()
-                .operators(new SumOperator(), new MultiplyOperator())
+                .operators(SUM, MULT)
                 .build();
         assertEquals(320, calculator.calculate("1*2*(3+4+9)*10"));
     }

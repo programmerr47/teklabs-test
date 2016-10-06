@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
-public class ExpressionLexer implements Lexer {
+public final class ExpressionLexer implements Lexer {
     private final SpecialTokens specialTokens;
     private List<Token> parsedTokens;
 

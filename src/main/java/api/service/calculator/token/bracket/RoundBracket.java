@@ -4,16 +4,16 @@ import api.service.calculator.token.Token;
 import api.service.calculator.token.TokenVisitor;
 
 public enum RoundBracket implements Bracket {
-    OPEN_BRACKET("(", true) {
+    OPEN("(", true) {
         @Override
         public boolean isPairFor(Token another) {
-            return another == CLOSE_BRACKET;
+            return another == CLOSE;
         }
     },
-    CLOSE_BRACKET(")", false) {
+    CLOSE(")", false) {
         @Override
         public boolean isPairFor(Token another) {
-            return another == OPEN_BRACKET;
+            return another == OPEN;
         }
     };
 

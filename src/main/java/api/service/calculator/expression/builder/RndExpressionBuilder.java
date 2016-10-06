@@ -13,7 +13,7 @@ import java.util.Stack;
 
 public final class RndExpressionBuilder implements ExpressionTreeBuilder {
     private final Collection<Token> tokens;
-    private ThreadLocal<Stack<Expression>> exprStack;
+    private Stack<Expression> exprStack;
 
     public RndExpressionBuilder(Collection<Token> tokens) {
         this.tokens = tokens;
@@ -21,21 +21,21 @@ public final class RndExpressionBuilder implements ExpressionTreeBuilder {
 
     @Override
     public Expression buildExpr() {
-        exprStack = ThreadLocal.withInitial(Stack::new);
+        exprStack = new Stack<>();
         TokenVisitor tokenVisitor = new InputExpressionVisitor();
         tokens.forEach(token -> token.accept(tokenVisitor));
-        return exprStack.get().pop();
+        return exprStack.pop();
     }
 
     private final class InputExpressionVisitor extends AbstractTokenVisitor {
         @Override
         public void visit(Number number) {
-            exprStack.get().push(number.toExpression());
+            exprStack.push(number.toExpression());
         }
 
         @Override
         public void visit(BinaryOperator operator) {
-            Stack<Expression> stack = exprStack.get();
+            Stack<Expression> stack = exprStack;
             if (stack.size() < 2) {
                 throw new TooManyOperatorsException();
             } else {

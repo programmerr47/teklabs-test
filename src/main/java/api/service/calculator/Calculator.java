@@ -9,14 +9,15 @@ import api.service.calculator.lexer.ExpressionLexer;
 import api.service.calculator.lexer.Lexer;
 import api.service.calculator.lexer.TrimStringLexer;
 import api.service.calculator.token.Token;
+import api.service.calculator.token.bracket.Bracket;
+import api.service.calculator.token.bracket.RoundBracket;
 import api.service.calculator.token.operator.BinaryOperator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static api.service.calculator.token.bracket.RoundBracket.CLOSE_BRACKET;
-import static api.service.calculator.token.bracket.RoundBracket.OPEN_BRACKET;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
@@ -33,7 +34,7 @@ public final class Calculator {
      *
      * @throws IllegalTokenException when using not registered tokens in expression
      *      (for example, pass "(1+2)*3" but not registered brackets in {@link Builder builder}
-     *      through {@link Builder#useDefaultBrackets()})
+     *      through {@link Builder#withDefaultBrackets()}) or {@link Builder#withBrackets(Bracket, Bracket)}
      * @throws WrongParenthesisException when using not balanced brackets in expression
      * @throws TooManyOperatorsException when using to many operators in expression
      * (for example "3*+*+3", but not registering "*+*+" operator)
@@ -47,15 +48,20 @@ public final class Calculator {
 
     public static final class Builder {
         private Collection<BinaryOperator> operators = emptyList();
-        private Collection<Token> brackets = emptyList();
+        private Collection<Token> brackets = new ArrayList<>();
 
         public Builder operators(BinaryOperator... operators) {
             this.operators = asList(operators);
             return this;
         }
 
-        public Builder useDefaultBrackets() {
-            this.brackets = asList(OPEN_BRACKET, CLOSE_BRACKET);
+        public Builder withDefaultBrackets() {
+            this.brackets.addAll(asList(RoundBracket.OPEN, RoundBracket.CLOSE));
+            return this;
+        }
+
+        public Builder withBrackets(Bracket open, Bracket close) {
+            this.brackets.addAll(asList(open, close));
             return this;
         }
 

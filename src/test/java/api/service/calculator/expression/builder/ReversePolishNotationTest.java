@@ -4,8 +4,7 @@ import api.service.calculator.exception.WrongParenthesisException;
 import api.service.calculator.token.bracket.RoundBracket;
 import api.service.calculator.token.Token;
 import api.service.calculator.token.number.TokenNumber;
-import api.service.calculator.token.operator.MultiplyOperator;
-import api.service.calculator.token.operator.SumOperator;
+import api.service.calculator.token.operator.DefaultBinaryOperator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,9 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by m.spitsin on 30.09.2016.
- */
 public class ReversePolishNotationTest {
     private final Notation notation = new ReversePolishNotation();
 
@@ -97,18 +93,18 @@ public class ReversePolishNotationTest {
     }
 
     private Token sum() {
-        return new SumOperator();
+        return DefaultBinaryOperator.SUM;
     }
 
     private Token mul() {
-        return new MultiplyOperator();
+        return DefaultBinaryOperator.MULT;
     }
 
     private Token lb() {
-        return RoundBracket.OPEN_BRACKET;
+        return RoundBracket.OPEN;
     }
 
     private Token rb() {
-        return RoundBracket.CLOSE_BRACKET;
+        return RoundBracket.CLOSE;
     }
 }
